@@ -4,4 +4,5 @@ datasets==5.1.0              # loads the guest list from the Hub
 rank_bm25==0.2.2             # BM25 retriever
 huggingface_hub==2.2.0       # Hub stats tool + inference client
 python-dotenv==1.2.4         # reads HF_TOKEN from .env
+openai==3.31.0               # client for the optional local Ollama backend
 ipykernel==7.4.0             # run notebook.ipynb with this venv

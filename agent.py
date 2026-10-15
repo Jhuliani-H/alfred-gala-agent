@@ -8,14 +8,16 @@ import os
 import sys
 
 from dotenv import load_dotenv
-from smolagents import ActionStep, CodeAgent, InferenceClientModel
+from smolagents import ActionStep, CodeAgent, InferenceClientModel, Model, OpenAIModel
 
 from retriever import GuestInfoRetrieverTool
 from tools import HubStatsTool, SafeWebSearchTool, WeatherInfoTool
 
-load_dotenv()  # pulls HF_TOKEN (and optional ALFRED_MODEL_ID) from .env
+load_dotenv()  # pulls HF_TOKEN and the optional ALFRED_* settings from .env
 
-DEFAULT_MODEL_ID = "Qwen/Qwen2.5-Coder-32B-Instruct"
+# The course's Qwen2.5-Coder-32B-Instruct is no longer served by any HF provider.
+DEFAULT_HF_MODEL = "Qwen/Qwen3-Coder-30B-A3B-Instruct"
+DEFAULT_OLLAMA_MODEL = "qwen2.5-coder:7b"
 
 ALFRED_INSTRUCTIONS = (
     "You are Alfred, a refined and resourceful butler managing an extravagant gala. "
@@ -26,12 +28,29 @@ ALFRED_INSTRUCTIONS = (
 )
 
 
-def build_alfred(model_id: str | None = None) -> CodeAgent:
-    """Create the Alfred CodeAgent with all of its tools."""
-    model = InferenceClientModel(
-        model_id=model_id or os.getenv("ALFRED_MODEL_ID", DEFAULT_MODEL_ID),
+def build_model(model_id: str | None = None) -> Model:
+    """Pick the LLM backend from ALFRED_BACKEND: "hf" (default) or "ollama".
+
+    - hf: Hugging Face Inference Providers, authenticated with HF_TOKEN.
+    - ollama: a local model served by Ollama's OpenAI-compatible API (free, offline).
+    """
+    backend = os.getenv("ALFRED_BACKEND", "hf").lower()
+    model_id = model_id or os.getenv("ALFRED_MODEL_ID")
+    if backend == "ollama":
+        return OpenAIModel(
+            model_id=model_id or DEFAULT_OLLAMA_MODEL,
+            api_base=os.getenv("OLLAMA_BASE_URL", "http://localhost:11434/v1"),
+            api_key="ollama",  # Ollama ignores the key, but the client requires one
+        )
+    return InferenceClientModel(
+        model_id=model_id or DEFAULT_HF_MODEL,
         token=os.getenv("HF_TOKEN"),
     )
+
+
+def build_alfred(model_id: str | None = None) -> CodeAgent:
+    """Create the Alfred CodeAgent with all of its tools."""
+    model = build_model(model_id)
     tools = [
         GuestInfoRetrieverTool(),
         SafeWebSearchTool(max_results=5),
