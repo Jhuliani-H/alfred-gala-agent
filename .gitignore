@@ -16,3 +16,7 @@ __pycache__/
 .gradio/
 .vscode/
 .idea/
+
+# Claude Code project notes (kept local, not uploaded)
+Claude.md
+CLAUDE.md
