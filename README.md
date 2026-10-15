@@ -38,7 +38,7 @@ The LLM writes short Python code that calls the tools. smolagents runs that code
 These steps are for Windows. You need Python 3.12 or newer.
 
 ```powershell
-git clone https://github.com/JhulianiH/alfred-gala-agent.git
+git clone https://github.com/Jhuliani-H/alfred-gala-agent.git
 cd alfred-gala-agent
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
