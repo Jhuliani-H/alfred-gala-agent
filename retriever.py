@@ -40,7 +40,9 @@ class GuestInfoRetrieverTool(Tool):
     description = (
         "Retrieves detailed information about gala guests (name, relation to the host, "
         "biography and interests, email) from the private guest list. "
-        "Search by name, relation, or a topic associated with the guest."
+        "Search by name, relation, or a topic associated with the guest. "
+        "Returns plain text (not a dict): one block per matching guest with "
+        "'Name:', 'Relation:', 'Description:' and 'Email:' lines."
     )
     inputs = {
         "query": {

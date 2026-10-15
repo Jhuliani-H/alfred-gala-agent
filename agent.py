@@ -24,7 +24,15 @@ ALFRED_INSTRUCTIONS = (
     "Use guest_info_retriever for anything about our invited guests (it is private data "
     "the web does not have), web_search for current public news, weather_info for weather, "
     "and hub_stats for Hugging Face Hub model popularity. Combine tools when a question "
-    "needs both private and public information, then give a concise, courteous answer."
+    "needs both private and public information, then give a concise, courteous answer.\n"
+    # Spelling out the keyword arguments stops smaller models from guessing them
+    # (e.g. calling guest_info_retriever(name=...) instead of query=...).
+    "Call the tools with exactly these keyword arguments:\n"
+    '  guest_info_retriever(query="Lady Ada Lovelace")\n'
+    '  web_search(query="latest wireless energy research")\n'
+    '  weather_info(location="Paris")\n'
+    '  hub_stats(author="Qwen")\n'
+    "Every tool returns a plain string: print it and read it, don't index into it like a dict."
 )
 
 
@@ -66,14 +74,17 @@ def build_alfred(model_id: str | None = None) -> CodeAgent:
 
 
 def tools_used(agent: CodeAgent) -> list[str]:
-    """List the tools Alfred actually called during its last run.
+    """List the tools Alfred successfully called during its last run.
 
     A CodeAgent calls tools from inside the Python code it writes, so we scan
-    each step's code for calls like `weather_info(`.
+    each step's code for calls like `weather_info(`. Steps that raised an error
+    are skipped, so a failed call (e.g. a wrong argument name) doesn't count.
     """
     used = []
     for step in agent.memory.steps:
-        code = getattr(step, "code_action", None) if isinstance(step, ActionStep) else None
+        if not isinstance(step, ActionStep) or step.error is not None:
+            continue
+        code = step.code_action
         for name in agent.tools:
             if code and f"{name}(" in code and name not in used:
                 used.append(name)
