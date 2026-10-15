@@ -96,5 +96,5 @@ if __name__ == "__main__":
     query = " ".join(sys.argv[1:]) or "Tell me about our guest named Lady Ada Lovelace."
     alfred = build_alfred()
     answer = alfred.run(query)
-    print("\n🎩 Alfred's response:\n", answer)
+    print("\nAlfred's response:\n", answer)
     print("\nTools used:", ", ".join(t for t in tools_used(alfred) if t != "final_answer"))
