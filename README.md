@@ -127,6 +127,8 @@ Answers are saved after each question. `--submit` only re-runs questions that ar
 
 **Official score: 35% (7 of 20), passed.** Submitted on October 21, 2026, as [JhulianiH](https://huggingface.co/JhulianiH), with `qwen3:8b`. [GAIA_RESULTS.txt](GAIA_RESULTS.txt) has the full report and every answer Alfred gave.
 
+![Hugging Face Agents Course Certificate of Excellence, issued 2026-10-22](certificate/agents-course-certificate.png)
+
 All runs were made on October 21, 2026, on an RTX 2070 Super (8 GB). Only the last one was submitted. The others were checked locally against GAIA's validation answers, using the same comparison as the course server.
 
 | Model | Alfred's tools | Correct answers (of 20), per run | Time per run |

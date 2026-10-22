@@ -17,6 +17,9 @@ Server reply: "Score calculated successfully: 7/20 total questions answered corr
 Leaderboard:  https://huggingface.co/spaces/agents-course/Students_leaderboard
               (row: JhulianiH, 35.0, https://github.com/Jhuliani-H/alfred-gala-agent/tree/main)
 Answers sent: gaia_results/answers_gaia_qwen3-12k.json
+Certificate:  Hugging Face Agents Course, Certificate of Excellence, issued 2026-10-22
+              certificate/agents-course-certificate.png
+              https://huggingface.co/datasets/agents-course/final-certificates/resolve/main/certificates/JhulianiH/2026-10-22.png
 
 
 SETUP OF THE SUBMITTED RUN
