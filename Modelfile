@@ -1,0 +1,7 @@
+# Ollama serves models with a 4096-token context by default, which a smolagents
+# CodeAgent's system prompt nearly fills on its own. This alias raises it to 12k,
+# the most that fits next to qwen3:8b on an 8 GB GPU (16k crashed the runner).
+#   ollama pull qwen3:8b
+#   ollama create qwen3-12k -f Modelfile
+FROM qwen3:8b
+PARAMETER num_ctx 12288

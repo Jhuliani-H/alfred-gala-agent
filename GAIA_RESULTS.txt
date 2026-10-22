@@ -1,0 +1,95 @@
+Alfred on the GAIA benchmark - Hugging Face Agents Course, Unit 4
+=================================================================
+
+Student:     JhulianiH (https://huggingface.co/JhulianiH)
+Class:       CS4800-60
+Assignment:  Unit 4 final assignment, https://huggingface.co/learn/agents-course/unit4/hands-on
+Benchmark:   20 level-1 GAIA validation questions served by https://agents-course-unit4-scoring.hf.space
+Grading:     exact match, ignoring case and surrounding spaces. Passing needs 30% (6 of 20).
+
+
+OFFICIAL RESULT
+---------------
+Score:        35.0%  (7 of 20 correct)  -> PASSED
+Submitted:    2026-10-22 02:47 UTC (2026-10-21, 10:47 PM US Eastern)
+Server reply: "Score calculated successfully: 7/20 total questions answered correctly
+              (20 valid tasks attempted). High score updated on leaderboard."
+Leaderboard:  https://huggingface.co/spaces/agents-course/Students_leaderboard
+              (row: JhulianiH, 35.0, https://github.com/Jhuliani-H/alfred-gala-agent/tree/main)
+Answers sent: gaia_results/answers_gaia_qwen3-12k.json
+
+
+SETUP OF THE SUBMITTED RUN
+--------------------------
+Agent:     smolagents 1.26.0 CodeAgent ("Alfred"), built by build_gaia_alfred() in gaia.py
+Tools:     web_search (DuckDuckGo), visit_webpage (with focus keywords), youtube_transcript
+Model:     qwen3:8b (Q4_K_M) on local Ollama 0.40.6, 12k context (alias qwen3-12k, see Modelfile)
+Extras:    exact-match answer rules in every question; a final answer is rejected if it is
+           written in the same step as a tool call whose output was not read yet; one extra
+           LLM call fixes the answer's format (not its content)
+Hardware:  NVIDIA RTX 2070 Super (8 GB), AMD Ryzen 7 3700X, 16 GB RAM, Windows 11
+Run time:  44.6 minutes for 20 questions
+Command:   python gaia.py --submit --username JhulianiH
+                   --agent-code https://github.com/Jhuliani-H/alfred-gala-agent/tree/main
+
+
+ALL RUNS (2026-10-21)
+---------------------
+Only the last run was submitted. The other runs were checked locally against GAIA's
+validation answers, using the same comparison as the course server.
+
+  Model              Alfred's tools               Correct (of 20)    Time per run
+  -----------------  ---------------------------  -----------------  ------------
+  qwen2.5-coder:7b   gala tools (stock Alfred)    3, 1, 1            5-6 min
+  qwen2.5-coder:7b   early GAIA tools             0, 0, 1, 5         7-10 min
+  qwen3:8b           GAIA tools, no format pass   6                  33 min
+  qwen3:8b           GAIA tools + format pass     7  (submitted)     45 min
+
+What changed between versions:
+  - qwen2.5-coder:7b often wrote prose instead of code, called tools with made-up URLs,
+    and answered before reading what its tools returned. That led to the answer guard.
+  - visit_webpage's focus first dropped Wikipedia tables (lists inside table cells split
+    the rows); it now keeps whole sections, their subsections, and one table row per line.
+  - qwen3:8b "thinks" before each step: about 5x slower, but it understood transcripts and
+    tables that the coder model misread.
+
+
+ANSWERS IN THE SUBMITTED RUN
+----------------------------
+Which answers were right is not listed, because GAIA asks people not to publish its
+validation answers. "(file)" marks questions whose attached file the course API could not
+serve (HTTP 404), so Alfred answered those without the file.
+
+  #   Question (start)                                       Alfred's answer           Steps  Time
+  1   How many studio albums were published by Mercedes So   3                          3   111s
+  2   In the video https://www.youtube.com/watch?v=L1vXCYZ   11                         4    56s
+  3   .rewsna eht sa "tfel" drow eht fo etisoppo eht etirw   answer. the as "left" ...  1   169s
+  4   Review the chess position provided in the image. It    Qh5#               (file)  2    35s
+  5   Who nominated the only Featured Article on English W   FunkMonk                   7   181s
+  6   Given this table defining * on the set S = {a, b, c,   b, e                       1   121s
+  7   Examine the video at https://www.youtube.com/watch?v   extremely                  7    83s
+  8   What is the surname of the equine veterinarian menti   Agnew                      5   115s
+  9   I'm making a grocery list for my mom, but she's a pr   broccoli, celery, ...      3   223s
+  10  Hi, I'm making a pie but I could use some help with    strawberries, sug. (file)  8   130s
+  11  Who did the actor who played Ray in the Polish-langu   Bartek                     4   127s
+  12  What is the final numeric output from the attached P   91                 (file)  6    60s
+  13  How many at bats did the Yankee with the most walks    519                        3    44s
+  14  Hi, I was out sick from my classes on Friday, so I'm   (empty)            (file)  1    29s
+  15  On June 6, 2023, an article by Carolyn Collins Peter   80GSFC21M0002              6   204s
+  16  Where were the Vietnamese specimens described by Kuz   Saint Petersburg           2    84s
+  17  What country had the least number of athletes at the   BHS                        6   254s
+  18  Who are the pitchers with the number before and afte   Nabatame, Kitayama         5   214s
+  19  The attached Excel file contains the sales of menu i   0.00               (file)  2    47s
+  20  What is the first name of the only Malko Competition   Maximiano                  5   391s
+
+Full answers, raw model output, tools used and timings are in gaia_results/*.json.
+
+
+NOTES
+-----
+- Results vary between runs: the same 5 questions were right in both qwen3:8b runs.
+- 5 questions need an attached file that the course API could not serve during these runs.
+  gaia.py can instead fetch them from the gated gaia-benchmark/GAIA dataset, given an
+  HF_TOKEN from an account that has accepted the dataset's terms.
+- Question 2 needs the video's pictures and question 4 needs the image; the model
+  cannot see either.

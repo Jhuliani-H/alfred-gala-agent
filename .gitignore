@@ -20,3 +20,6 @@ __pycache__/
 # Claude Code project notes (kept local, not uploaded)
 Claude.md
 CLAUDE.md
+
+# GAIA attachments (benchmark files, not ours to redistribute)
+gaia_files/
